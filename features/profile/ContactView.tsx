@@ -28,7 +28,12 @@ export const ContactView: React.FC<ContactViewProps> = ({ setActiveFeature }) =>
                         <label className="font-semibold text-[var(--text-primary)]">Jam Operasional</label>
                         <p className="text-[var(--text-secondary)]">Senin - Jumat, 09:00 - 17:00 WIB</p>
                     </div>
-                     <button className="w-full mt-4 p-3 bg-[var(--primary-color)] text-white font-bold rounded-lg hover:bg-[var(--primary-color-dark)] transition-transform duration-150 ease-in-out hover:scale-[1.03] active:scale-[0.98]">Kirim Pesan</button>
+                     <a
+                        href="mailto:support@asistenguru.id"
+                        className="w-full mt-4 p-3 bg-[var(--primary-color)] text-white font-bold rounded-lg hover:bg-[var(--primary-color-dark)] transition-transform duration-150 ease-in-out hover:scale-[1.03] active:scale-[0.98] text-center block"
+                     >
+                        Kirim Pesan
+                     </a>
                 </div>
             </main>
         </div>

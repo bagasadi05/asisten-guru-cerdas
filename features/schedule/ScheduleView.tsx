@@ -15,6 +15,7 @@ import {
     PencilIcon,
 } from '../../components/icons/Icons';
 import { EmptyState } from '../../components/EmptyState';
+import { Spinner } from '../../components/Spinner'; // Import Spinner
 
 interface ScheduleViewProps {
     schedule: ScheduleItem[];
@@ -246,6 +247,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, addSchedul
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState<ScheduleItem | null>(null);
     const [itemToEdit, setItemToEdit] = useState<ScheduleItem | null>(null);
+    const [isGlobalLoading, setIsGlobalLoading] = useState(false); // State for global loading
 
     useEffect(() => {
         if (initialItemId && schedule.length > 0) {
@@ -261,10 +263,29 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, addSchedul
     }, [initialItemId, schedule]);
 
     const handleSaveSchedule = async (itemData: Omit<ScheduleItem, 'id' | 'user_id'>, repeatOption: string, repeatUntil: string, id?: string) => {
-        if (id) {
-            await updateSchedule(id, itemData);
-        } else {
-            await addSchedule(itemData, repeatOption, repeatUntil);
+        setIsGlobalLoading(true);
+        try {
+            if (id) {
+                await updateSchedule(id, itemData);
+            } else {
+                await addSchedule(itemData, repeatOption, repeatUntil);
+            }
+        } catch (error) {
+            console.error("Error saving schedule:", error);
+            // Toast atau error handling lain mungkin sudah ada di App.tsx
+        } finally {
+            setIsGlobalLoading(false);
+        }
+    };
+
+    const handleDeleteSchedule = async (id: string) => {
+        setIsGlobalLoading(true);
+        try {
+            await deleteSchedule(id);
+        } catch (error) {
+            console.error("Error deleting schedule:", error);
+        } finally {
+            setIsGlobalLoading(false);
         }
     };
 
@@ -312,7 +333,12 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, addSchedul
     const eventDates = useMemo(() => new Set(schedule.map(item => item.date)), [schedule]);
 
     return (
-        <div className="bg-[var(--background-light)] flex flex-col h-full">
+        <div className="bg-[var(--background-light)] flex flex-col h-full relative"> {/* Added relative for overlay positioning */}
+            {isGlobalLoading && (
+                <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-50">
+                    <Spinner size="lg" color="text-white" />
+                </div>
+            )}
             <header className="sticky top-0 z-10 bg-[var(--background-white)]/80 backdrop-blur-sm shadow-sm">
                  <div className="relative flex items-center justify-center p-4 border-b border-[var(--border-light)]">
                     <div className="absolute left-2 md:hidden">
@@ -406,6 +432,6 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ schedule, addSchedul
             </div>
             
             <AddEditScheduleModal isOpen={isAddEditModalOpen} onClose={() => setIsAddEditModalOpen(false)} onSave={handleSaveSchedule} itemToEdit={itemToEdit} initialDate={selectedDate}/>
-            <DetailModal item={selectedItem} isOpen={isDetailModalOpen} onClose={() => setIsDetailModalOpen(false)} onDelete={deleteSchedule} onEdit={handleEditClick} />
+            <DetailModal item={selectedItem} isOpen={isDetailModalOpen} onClose={() => setIsDetailModalOpen(false)} onDelete={handleDeleteSchedule} onEdit={handleEditClick} />
         </div>
     );

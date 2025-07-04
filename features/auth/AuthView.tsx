@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../services/supabaseService';
-import { AcademicCapIcon, EnvelopeIcon, LockClosedIcon } from '../../components/icons/Icons';
+import { SparklesIcon, EnvelopeIcon, LockClosedIcon } from '../../components/icons/Icons'; // Changed AcademicCapIcon to SparklesIcon
 import { Spinner } from '../../components/Spinner';
 
 export const AuthView: React.FC = () => {
@@ -54,15 +54,16 @@ export const AuthView: React.FC = () => {
         }
     };
 
-    const inputStyles = "w-full pl-10 pr-3 py-3 bg-gray-100 dark:bg-gray-800 border-2 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-colors text-[var(--text-primary)]";
-    const buttonStyles = "w-full py-3 px-4 bg-[var(--primary-color)] text-white font-bold rounded-lg hover:bg-[var(--primary-color-dark)] transition-all duration-150 ease-in-out hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center";
+    // Modernized input styles
+    const inputStyles = "w-full pl-10 pr-3 py-3 bg-white dark:bg-gray-900/50 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition-all duration-150 ease-in-out text-[var(--text-primary)] placeholder-gray-400 dark:placeholder-gray-500 shadow-sm";
+    const buttonStyles = "w-full py-3 px-4 bg-[var(--primary-color)] text-white font-bold rounded-lg hover:bg-[var(--primary-color-dark)] transition-all duration-150 ease-in-out hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 flex items-center justify-center shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary-color)]";
 
     return (
         <div className="min-h-dvh bg-[var(--background-light)] flex items-center justify-center p-4 animate-fade-in">
-            <div className="w-full max-w-4xl mx-auto flex rounded-2xl shadow-2xl overflow-hidden bg-[var(--background-white)]">
+            <div className="w-full max-w-4xl mx-auto flex rounded-3xl shadow-2xl overflow-hidden bg-[var(--background-white)]"> {/* Changed to rounded-3xl */}
                 {/* Branding Column */}
-                <div className="hidden md:flex flex-col items-center justify-center w-1/2 bg-gradient-to-br from-[var(--primary-color)] to-blue-600 p-12 text-white text-center">
-                    <AcademicCapIcon className="w-24 h-24 mb-4" />
+                <div className="hidden md:flex flex-col items-center justify-center w-1/2 bg-gradient-to-br from-[var(--primary-color)] via-blue-500 to-sky-600 p-12 text-white text-center relative overflow-hidden"> {/* Added relative overflow-hidden for pseudo-elements if needed later */}
+                    <SparklesIcon className="w-28 h-28 mb-6 text-white/90" />
                     <h2 className="text-3xl font-bold">Asisten Guru Cerdas</h2>
                     <p className="mt-2 opacity-90">Solusi digital untuk guru modern. Efisien, cepat, dan terorganisir.</p>
                 </div>
@@ -79,8 +80,9 @@ export const AuthView: React.FC = () => {
                     </div>
 
                     <form onSubmit={handleAuth} className="space-y-6">
-                        <div className="relative">
-                            <EnvelopeIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"/>
+                        {/* Email Input */}
+                        <div className="relative group"> {/* Added group for potential future group-hover effects */}
+                            <EnvelopeIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400 group-focus-within:text-[var(--primary-color)] transition-colors duration-150" />
                             <input
                                 type="email"
                                 placeholder="guru@sekolah.id"
@@ -90,8 +92,9 @@ export const AuthView: React.FC = () => {
                                 required
                             />
                         </div>
-                        <div className="relative">
-                            <LockClosedIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400"/>
+                        {/* Password Input */}
+                        <div className="relative group"> {/* Added group for potential future group-hover effects */}
+                            <LockClosedIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400 group-focus-within:text-[var(--primary-color)] transition-colors duration-150" />
                             <input
                                 type="password"
                                 placeholder="••••••••"
@@ -124,7 +127,10 @@ export const AuthView: React.FC = () => {
                     </form>
 
                     <div className="mt-6 text-center">
-                        <button onClick={() => { setIsLoginView(!isLoginView); setError(null); }} className="text-sm font-medium text-[var(--primary-color)] hover:underline">
+                        <button
+                            onClick={() => { setIsLoginView(!isLoginView); setError(null); }}
+                            className="text-sm font-medium text-[var(--primary-color)] hover:text-[var(--primary-color-dark)] hover:underline transition-colors duration-150 transform hover:scale-105"
+                        >
                             {isLoginView ? 'Belum punya akun? Daftar' : 'Sudah punya akun? Masuk'}
                         </button>
                     </div>

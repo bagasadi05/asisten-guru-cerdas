@@ -201,6 +201,7 @@ export const TodoGenerator: React.FC<TodoGeneratorProps> = ({ setActiveFeature, 
     const [taskToEdit, setTaskToEdit] = useState<TaskItem | null>(null);
     const [collapsedSections, setCollapsedSections] = useState<Record<TaskStatus, boolean>>({ 'Selesai': true, 'Dikerjakan': false, 'Belum': false });
     const [searchTerm, setSearchTerm] = useState('');
+    const [isGlobalLoading, setIsGlobalLoading] = useState(false); // State for global loading
 
     const filteredTasks = useMemo(() => {
         return tasks.filter(task =>
@@ -219,21 +220,42 @@ export const TodoGenerator: React.FC<TodoGeneratorProps> = ({ setActiveFeature, 
     }, [filteredTasks]);
 
     const handleStatusChange = async (taskId: string, newStatus: TaskStatus) => {
-        await updateTask(taskId, { status: newStatus });
+        setIsGlobalLoading(true);
+        try {
+            await updateTask(taskId, { status: newStatus });
+        } catch (error) {
+            console.error("Error updating task status:", error);
+        } finally {
+            setIsGlobalLoading(false);
+        }
     };
 
     const handleSaveTask = async (taskData: Omit<TaskItem, 'id' | 'status' | 'user_id'>, id?: string) => {
-        if (id) {
-            await updateTask(id, taskData);
-        } else {
-            await addTask({ ...taskData, status: 'Belum' });
+        setIsGlobalLoading(true);
+        try {
+            if (id) {
+                await updateTask(id, taskData);
+            } else {
+                await addTask({ ...taskData, status: 'Belum' });
+            }
+        } catch (error) {
+            console.error("Error saving task:", error);
+        } finally {
+            setIsGlobalLoading(false);
         }
     };
     
     const handleDelete = async () => {
         if (taskToDelete) {
-            await deleteTask(taskToDelete.id);
-            setTaskToDelete(null);
+            setIsGlobalLoading(true);
+            try {
+                await deleteTask(taskToDelete.id);
+                setTaskToDelete(null);
+            } catch (error) {
+                console.error("Error deleting task:", error);
+            } finally {
+                setIsGlobalLoading(false);
+            }
         }
     };
 
@@ -252,7 +274,12 @@ export const TodoGenerator: React.FC<TodoGeneratorProps> = ({ setActiveFeature, 
     };
     
     return (
-        <div className="bg-[var(--background-light)] min-h-full">
+        <div className="bg-[var(--background-light)] min-h-full relative"> {/* Added relative for overlay positioning */}
+            {isGlobalLoading && (
+                <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-50">
+                    <Spinner size="lg" color="text-white" />
+                </div>
+            )}
             <header className="bg-[var(--background-white)]/80 backdrop-blur-sm sticky top-0 z-20 flex items-center p-4 border-b border-[var(--border-light)]">
                 <button onClick={() => setActiveFeature('home')} className="p-2 -ml-2 md:hidden">
                     <ArrowLeftIcon className="size-6 text-[var(--text-primary)]" />
