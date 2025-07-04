@@ -1,0 +1,22 @@
+{
+  "short_name": "Asisten Guru",
+  "name": "Asisten Guru Cerdas",
+  "description": "Asisten digital pribadi untuk membantu guru SD dalam menyusun, mengelola, dan menyederhanakan pekerjaan sehari-hari.",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512"
+    },
+    {
+      "src": "/vite.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#4A90E2",
+  "background_color": "#F8F9FA"
+}
