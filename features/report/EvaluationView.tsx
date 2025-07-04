@@ -144,7 +144,7 @@ export const EvaluationView: React.FC<EvaluationViewProps> = (props) => {
     }
 
     return (
-        <div className="bg-[var(--background-light)] min-h-full pb-28">
+        <div className="bg-[var(--background-light)] min-h-full pb-40">
             <div className="p-6 md:p-8">
                 <header className="mb-8">
                     <h1 className="text-3xl font-bold text-[var(--text-primary)]">Kelas Saya</h1>

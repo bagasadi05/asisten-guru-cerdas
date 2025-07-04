@@ -5,7 +5,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { ScheduleView } from './features/schedule/ScheduleView';
 import { TodoGenerator } from './features/todo/TodoGenerator';
-import { EvaluationView } from './features/report/ReportGenerator';
+import { EvaluationView } from './features/report/EvaluationView';
 import { TipsGenerator } from './features/tips/TipsGenerator';
 import { HomeView } from './features/home/HomeView';
 import { ProfileView } from './features/profile/ProfileView';
